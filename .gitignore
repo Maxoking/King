@@ -1,0 +1,11 @@
+
+*.sdf
+*.suo
+*.dir
+*.vcxproj*
+*.sln
+.vs/
+bin/
+bin-int/
+
+
