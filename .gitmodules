@@ -1,0 +1,6 @@
+[submodule "King/vendor/spdlog"]
+	path = King/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "King/vendor/GLFW"]
+	path = King/vendor/GLFW
+	url = https://github.com/Maxoking/glfw
