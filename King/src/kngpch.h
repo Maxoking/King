@@ -5,6 +5,7 @@
 #include <utility>
 #include <algorithm>
 #include <functional>
+#include <fstream>
 
 #include <string>
 #include <sstream>
@@ -13,4 +14,6 @@
 #include <unordered_set>
 
 #include <Windows.h>
+
+#include "King/Log.h"
 

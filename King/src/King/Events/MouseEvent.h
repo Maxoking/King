@@ -10,7 +10,7 @@ namespace King {
     float getMouseX() { return m_MouseX; };
     float getMouseY() { return m_MouseY; };
     static EventType getStaticType() { return EventType::MouseMoved; };
-    virtual EventType getEventType() const override { getStaticType(); };
+    virtual EventType getEventType() const override { return getStaticType(); };
     virtual int getEventCategoryFlags() const override { return EventCategoryInput | EventCategoryMouse; };
     virtual const char* getName() const override { return "MouseMoved"; };
 
@@ -30,7 +30,7 @@ namespace King {
     MouseButtonPressed(int keyCode) : m_keyCode(keyCode) {};
     int getKeyCode() { return m_keyCode; };
     static EventType getStaticType() { return EventType::MouseButtonPressed; };
-    virtual EventType getEventType() const override { getStaticType(); };
+    virtual EventType getEventType() const override { return getStaticType(); };
     virtual int getEventCategoryFlags() const override { return EventCategoryInput | EventCategoryMouse; };
     virtual const char* getName() const override { return "MouseButtonPressed"; };
 
@@ -50,7 +50,7 @@ namespace King {
     MouseButtonReleased(int keyCode) : m_keyCode(keyCode) {};
     int getKeyCode() { return m_keyCode; };
     static EventType getStaticType() { return EventType::MouseButtonReleased; };
-    virtual EventType getEventType() const override { getStaticType(); };
+    virtual EventType getEventType() const override { return getStaticType(); };
     virtual int getEventCategoryFlags() const override { return EventCategoryInput | EventCategoryMouse; };
     virtual const char* getName() const override { return "MouseButtonReleased"; };
 

@@ -10,10 +10,21 @@ workspace "King"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "King/vendor/GLFW/include"
+IncludeDir["Glad"] = "King/vendor/Glad/include"
+IncludeDir["ImGUI"] = "King/vendor/ImGUI/"
+
+include "King/vendor/GLFW"
+include "King/vendor/Glad"
+include "King/vendor/ImGUI"
+
 project "King"
 	location "King"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -34,7 +45,19 @@ project "King"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/glm",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGUI}"
+	}
+
+	links 
+	{ 
+		"GLFW",
+		"Glad",
+		"ImGUI",
+		"opengl32.lib"
 	}
 
 	cppdialect "C++17"
@@ -43,7 +66,8 @@ project "King"
 
 	defines
 	{
-		"KING_BUILD_DLL"
+		"KING_BUILD_DLL",
+		"GLFW_INCLUDE_NONE"
 	}
 
 
@@ -52,16 +76,19 @@ project "King"
 	filter "configurations:Debug"
 		defines "KING_DEBUG"
 		symbols "On"
+		buildoptions "/MDd"
 
 
 	filter "configurations:Release"
 		defines "KING_RELEASE"
 		symbols "On"
+		buildoptions "/MD"
 
 
 	filter "configurations:Dist"
-	defines "KING_DIST"
-	symbols "On"
+		defines "KING_DIST"
+		symbols "On"
+		buildoptions "/MD"
 
 project "Sandbox"
 	location "Sandbox"
@@ -80,29 +107,42 @@ project "Sandbox"
 
 	includedirs
 	{
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
 		"King/vendor/spdlog/include",
+		"King/vendor/glm",
 		"King/src"
 	}
 
 	links
 	{
-		"King"
+		"King",
+		"Glad"
+	}
+
+	defines
+	{
+		"GLFW_INCLUDE_NONE"
 	}
 
 	cppdialect "C++17"
 	staticruntime "On"
 	systemversion "10.0.17763.0"
+	staticruntime "off"
 
 	filter "configurations:Debug"
 		defines "KING_DEBUG"
-		symbols "On"
+		symbols "On"		
+		buildoptions "/MDd"
 
 
 	filter "configurations:Release"
 		defines "KING_RELEASE"
 		symbols "On"
+		buildoptions "/MD"
 
 
 	filter "configurations:Dist"
-	defines "KING_DIST"
-	symbols "On"
+		defines "KING_DIST"
+		symbols "On"
+		buildoptions "/MD"

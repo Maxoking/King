@@ -1,4 +1,5 @@
 #pragma once
+#include "kngpch.h"
 #include "../Core.h"
 
 namespace King {
@@ -22,7 +23,6 @@ namespace King {
   };
 
   class KING_API Event {
-  friend class EventDispatcher;
 
   public:
     virtual EventType getEventType() const = 0;
@@ -30,8 +30,6 @@ namespace King {
     virtual int getEventCategoryFlags() const = 0;
     virtual std::string toString() const { return getName(); };
     inline bool isInCategory(EventCategory category) { return getEventCategoryFlags() & category; };
-
-  protected:
     bool m_handled = false;
 
   };
@@ -43,9 +41,11 @@ namespace King {
     EventDispatcher(Event& event) : m_event(event) {};
 
     template<typename T> bool dispatch(EventFn<T> function) {
-      if (m_event.getEventType() == T::GetStaticType()) {
+      if (m_event.getEventType() == T::getStaticType()) {
         m_event.m_handled = function(*(T*)&m_event);
+        return true;
       }
+      return false;
     };
 
   private:
