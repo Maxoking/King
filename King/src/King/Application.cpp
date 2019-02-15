@@ -7,6 +7,9 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/Buffer.h"
+#include "Graphics/Buffers/IndexBuffer.h"
+#include "Graphics/Renderable2D.h"
+#include "Graphics/SimpleRenderer.h"
 #include "glad/glad.h"
 
 namespace King {
@@ -53,7 +56,6 @@ namespace King {
   {
     m_mouseX = e.getMouseX() / 100.f;
     m_mouseY = e.getMouseY() / 100.f;
-    KING_CORE_TRACE(e);
     return true;
   }
 
@@ -78,61 +80,46 @@ namespace King {
   void Application::run() {
 
 
-    GLfloat vertices[] =
-    {
-        4.f,  2.25f,   0,
-       12.f,  2.25f,   0,
-       12.f,  6.25f,   0,
-        4.f,  6.25f,   0,
-        4.f,  2.25f,   0,
-       12.f,  6.25f,   0
-    };
 
-   /* graphics::Buffer* vbo = new graphics::Buffer(vertices, 6 * 3, 3);
-    graphics::VertexArray vao;
-    vao.addBuffer(vbo, 0);*/
+    /*graphics::Shader shader("C:/dev/King/King/src/King/Graphics/Shaders/BasicShader.vert",
+      "C:/dev/King/King/src/King/Graphics/Shaders/BasicShader.frag");*/
 
-    GLuint vao;
-    GLuint vbo;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//graphics::Renderable2D sprite1(glm::vec3(5, 5, 0), glm::vec2(3.f), shader);
 
-    graphics::Shader shader("C:/dev/King/King/src/King/Graphics/Shaders/BasicShader.vert",
-      "C:/dev/King/King/src/King/Graphics/Shaders/BasicShader.frag");
+ //   glm::mat4 viewMatrix(1.f);
+ //   glm::mat4 projectionMatrix = glm::ortho(0.f, 16.f, 0.f, 9.f, 0.f, 1.f);
+	//glm::mat4 modelMatrix1(glm::translate(glm::mat4(1.f), glm::vec3(0,0,0)));
 
-    glm::mat4 viewMatrix(1.f);
-    glm::mat4 projectionMatrix = glm::ortho(0.f, 16.f, 0.f, 9.f, 0.f, 1.f);
-    //glm::mat4 projectionMatrix = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
-   
-    shader.bind();
+	//glm::mat4 modelMatrix2(glm::translate(glm::mat4(1.f), glm::vec3(-2, -4, 0)));
+ //   //glm::mat4 projectionMatrix = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
+ //  
+ //   shader.bind();
 
-    glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "view_mat"), 1, GL_FALSE, &viewMatrix[0][0]);
+	//graphics::SimpleRenderer renderer;
+
+ //   glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "view_mat"), 1, GL_FALSE, &viewMatrix[0][0]);
     
     while (m_running) {
 
-      GLuint lightpos = glGetUniformLocation(shader.getID(), "light_pos");
-      glUniform2f(lightpos, m_mouseX, m_mouseY);
-      glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "proj_mat"), 1, GL_FALSE, &projectionMatrix[0][0]);
+	  //shader.setUniform2f("light_pos", { m_mouseX, m_mouseY });
 
+	  /*shader.setUniformMat4("proj_mat", projectionMatrix);*/
       glClearColor(0, 1, 0.4f, 1);
       
       glClear(GL_COLOR_BUFFER_BIT);
-       //1st attribute buffer : vertices
-      glEnableVertexAttribArray(0);
-       //Draw the triangle !
-      glDrawArrays(GL_TRIANGLES, 0, 6); // Starting from vertex 0; 3 vertices total -> 1 triangle
-      glDisableVertexAttribArray(0);
 
-      /*vao.bind();
-      vbo->bind();
-      */
+	 /* renderer.submit(&sprite1);
+	  renderer.flush();*/
+
+
       for (Layer* layer : m_stack) {
         layer->onUpdate();
       }
+
+	  for (Layer* layer : m_stack) {
+		  layer->onRender();
+	  }
+
 
       m_window->onUpdate();
     };

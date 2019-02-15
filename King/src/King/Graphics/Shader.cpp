@@ -56,13 +56,45 @@ namespace King {
       glLinkProgram(shaderProgram);
       return shaderProgram;
     }
+
     void Shader::bind()
     {
       glUseProgram(m_ID);
     }
+
     void Shader::unbind()
     {
       glUseProgram(0);
     }
+
+	void Shader::setUniform1f(const GLchar * name, float value)
+	{
+		glUniform1f(glGetUniformLocation(m_ID, name), value);
+	}
+
+	void Shader::setUniform1i(const GLchar * name, int value)
+	{
+		glUniform1i(glGetUniformLocation(m_ID, name), value);
+	}
+
+	void Shader::setUniform2f(const GLchar * name, glm::vec2 value)
+	{
+		glUniform2f(glGetUniformLocation(m_ID, name), value.x, value.y);
+	}
+
+	void Shader::setUniform3f(const GLchar * name, glm::vec3 value)
+	{
+		glUniform3f(glGetUniformLocation(m_ID, name), value.x, value.y, value.z);
+	}
+
+	void Shader::setUniform4f(const GLchar * name, glm::vec4 value)
+	{
+		glUniform4f(glGetUniformLocation(m_ID, name), value.x, value.y, value.z, value.w);
+	}
+
+	void Shader::setUniformMat4(const GLchar * name, glm::mat4 value)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(m_ID, name), 1, GL_FALSE, &value[0][0]);
+	}
   }
 }

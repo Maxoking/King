@@ -1,5 +1,6 @@
 #pragma once
 #include "glad/glad.h"
+#include "glm/mat4x4.hpp"
 #include "King/utils/fileutils.h"
 
 namespace King {
@@ -15,6 +16,13 @@ namespace King {
       void bind();
       void unbind();
       GLuint getID() { return m_ID; };
+
+	  void setUniform1f(const GLchar* name, float value);
+	  void setUniform1i(const GLchar* name, int value);
+	  void setUniform2f(const GLchar* name, glm::vec2 value);
+	  void setUniform3f(const GLchar* name, glm::vec3 value);
+	  void setUniform4f(const GLchar* name, glm::vec4 value);
+	  void setUniformMat4(const GLchar* name, glm::mat4 value);
     };
   }
 }

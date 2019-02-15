@@ -3,12 +3,12 @@
 
 namespace King {
   namespace graphics {
-    Buffer::Buffer(GLfloat * data, GLsizei count, GLuint components)
+    Buffer::Buffer(GLfloat * data, GLsizei count, GLuint components) : m_componentCount(components)
     {
       glGenBuffers(1, &m_ID);
-      bind();
+	  glBindBuffer(GL_ARRAY_BUFFER, m_ID);
       glBufferData(GL_ARRAY_BUFFER, count * sizeof(GLfloat), data, GL_STATIC_DRAW);
-      unbind();
+	  glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void Buffer::bind() {

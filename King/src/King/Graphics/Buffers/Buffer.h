@@ -10,7 +10,6 @@ namespace King {
       GLuint m_componentCount;
     public:
       Buffer(GLfloat* data, GLsizei size, GLuint components);
-      //~Buffer();
       void bind();
       void unbind();
 
