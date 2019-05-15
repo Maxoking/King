@@ -35,6 +35,8 @@ namespace King {
 
     void onUpdate();
     void onEvent(Event& e);
+
+	GLFWwindow* getNativeWindow() { return m_glfwWindow; };
     unsigned int getWidth() { return m_data.width; };
     unsigned int getHeight() { return m_data.height; };
     void setEventCallBack(const EventCallbackFn& callback) { m_data.EventCallBack = callback; };

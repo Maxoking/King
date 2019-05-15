@@ -43,7 +43,6 @@ namespace King {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_FN(onWindowClose));
     dispatcher.dispatch<MouseMoved>(BIND_FN(onMouseMoved));
-    KING_CORE_TRACE(e);
 
     for (auto it = m_stack.end(); it != m_stack.begin();) {
       (*--it)->onEvent(e);
@@ -54,8 +53,6 @@ namespace King {
   
   bool Application::onMouseMoved(MouseMoved& e)
   {
-    m_mouseX = e.getMouseX() / 100.f;
-    m_mouseY = e.getMouseY() / 100.f;
     return true;
   }
 

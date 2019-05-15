@@ -17,7 +17,6 @@ namespace King {
     static Application* s_instance;
     std::unique_ptr<Window> m_window;
     bool m_running = true;
-    float m_mouseX, m_mouseY;
   public:
     inline static Application& get() { return *s_instance; }
 
