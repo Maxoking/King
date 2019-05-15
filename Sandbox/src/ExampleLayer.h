@@ -12,5 +12,6 @@ public:
 	void onRender() override;
 	void onUpdate() override;
 	void onAttach() override;
-  //void onEvent(King::Event& e) override { KING_TRACE(e); };
+  void onEvent(King::Event& e) override { KING_TRACE(e); };
+  
 };

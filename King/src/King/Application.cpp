@@ -43,7 +43,7 @@ namespace King {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_FN(onWindowClose));
     dispatcher.dispatch<MouseMoved>(BIND_FN(onMouseMoved));
-    //KING_CORE_TRACE(e);
+    KING_CORE_TRACE(e);
 
     for (auto it = m_stack.end(); it != m_stack.begin();) {
       (*--it)->onEvent(e);

@@ -36,3 +36,5 @@ void ExampleLayer::onAttach()
 	King::graphics::Renderable2D* sprite = new King::graphics::Renderable2D(glm::vec3(5, 5, 0), glm::vec2(3.f), m_shader);
 	add(sprite);
 }
+
+
