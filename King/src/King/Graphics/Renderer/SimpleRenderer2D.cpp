@@ -1,14 +1,17 @@
 #include "kngpch.h"
-#include "SimpleRenderer.h"
+#include "SimpleRenderer2D.h"
 namespace King {
 	namespace graphics {
 
-		void SimpleRenderer::submit(Renderable2D * renderable)
+
+    void SimpleRenderer2D::submit(std::shared_ptr<VertexArray> vao) {};
+
+		void SimpleRenderer2D::submit(Renderable2D * renderable)
 		{
 			m_renderQueue.push_back(renderable);
 		}
 
-		void SimpleRenderer::flush()
+		void SimpleRenderer2D::flush()
 		{
 			while (!m_renderQueue.empty()) {
 				Renderable2D* renderable = m_renderQueue.front();

@@ -9,7 +9,8 @@
 #include "Graphics/Buffers/Buffer.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Renderable2D.h"
-#include "Graphics/SimpleRenderer.h"
+#include "Graphics/Renderer/SimpleRenderer2D.h"
+#include "Graphics/Buffers/BufferLayout.h"
 #include "glad/glad.h"
 
 namespace King {
@@ -24,6 +25,7 @@ namespace King {
     s_instance = this;
     m_window = std::unique_ptr<Window>(Window::createWindow());
     m_window->setEventCallBack(BIND_FN(onEvent));
+
   }
 
   void Application::pushLayer(Layer * layer)
@@ -43,12 +45,20 @@ namespace King {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_FN(onWindowClose));
     dispatcher.dispatch<MouseMoved>(BIND_FN(onMouseMoved));
+    dispatcher.dispatch<KeyPressedEvent>(BIND_FN(onKeyPressed));
 
     for (auto it = m_stack.end(); it != m_stack.begin();) {
       (*--it)->onEvent(e);
       if (e.m_handled)
         break;
     } 
+  }
+
+  bool Application::onKeyPressed(KeyPressedEvent& e)
+  {
+    if(e.getKeyCode() == GLFW_KEY_ESCAPE)
+      m_running = false;
+    return true;
   }
   
   bool Application::onMouseMoved(MouseMoved& e)
@@ -75,26 +85,6 @@ namespace King {
   }
 
   void Application::run() {
-
-
-
-    /*graphics::Shader shader("C:/dev/King/King/src/King/Graphics/Shaders/BasicShader.vert",
-      "C:/dev/King/King/src/King/Graphics/Shaders/BasicShader.frag");*/
-
-	//graphics::Renderable2D sprite1(glm::vec3(5, 5, 0), glm::vec2(3.f), shader);
-
- //   glm::mat4 viewMatrix(1.f);
- //   glm::mat4 projectionMatrix = glm::ortho(0.f, 16.f, 0.f, 9.f, 0.f, 1.f);
-	//glm::mat4 modelMatrix1(glm::translate(glm::mat4(1.f), glm::vec3(0,0,0)));
-
-	//glm::mat4 modelMatrix2(glm::translate(glm::mat4(1.f), glm::vec3(-2, -4, 0)));
- //   //glm::mat4 projectionMatrix = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -1.0f, 1.0f);
- //  
- //   shader.bind();
-
-	//graphics::SimpleRenderer renderer;
-
- //   glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "view_mat"), 1, GL_FALSE, &viewMatrix[0][0]);
     
     while (m_running) {
 
@@ -113,9 +103,9 @@ namespace King {
         layer->onUpdate();
       }
 
-	  for (Layer* layer : m_stack) {
-		  layer->onRender();
-	  }
+	    for (Layer* layer : m_stack) {
+		    layer->onRender();
+	    }
 
 
       m_window->onUpdate();

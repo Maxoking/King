@@ -25,14 +25,14 @@ namespace King {
 #define KING_CORE_ERROR(...)    King::Log::getCoreLogger()->error(__VA_ARGS__)
 #define KING_CORE_INFO(...)     King::Log::getCoreLogger()->info(__VA_ARGS__)
 #define KING_CORE_WARN(...)     King::Log::getCoreLogger()->warn(__VA_ARGS__)
-#define KING_CORE_FATAL(...)    King::Log::getCoreLogger()->fatal(__VA_ARGS__)
+#define KING_CORE_FATAL(...)    King::Log::getCoreLogger()->critical(__VA_ARGS__)
 
 //Client log macros
 #define KING_TRACE(...)     King::Log::getClientLogger()->trace(__VA_ARGS__)
 #define KING_ERROR(...)     King::Log::getClientLogger()->error(__VA_ARGS__)
 #define KING_INFO(...)      King::Log::getClientLogger()->info(__VA_ARGS__)
 #define KING_WARN(...)      King::Log::getClientLogger()->warn(__VA_ARGS__)
-#define KING_FATAL(...)     King::Log::getClientLogger()->fatal(__VA_ARGS__)
+#define KING_FATAL(...)     King::Log::getClientLogger()->critical(__VA_ARGS__)
 
 
 

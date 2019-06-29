@@ -10,9 +10,7 @@ namespace King {
 
      VertexArray::~VertexArray() 
      {
-       for (int i = 0; i < m_buffers.size(); i++) {
-         delete m_buffers[i];
-       }
+       glDeleteVertexArrays(1, &m_ID);
      }
 
      void VertexArray::addBuffer(Buffer* buffer, GLuint index)
@@ -23,6 +21,32 @@ namespace King {
        glEnableVertexAttribArray(index);
        glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0, 0);
 
+
+       //m_buffers.push_back(buffer);
+
+       buffer->unbind();
+       unbind();
+     }
+
+     void VertexArray::addBufferWithLayout(const std::shared_ptr<Buffer>& buffer)
+     {
+       bind();
+       buffer->bind();
+       int index = 0;
+       BufferLayout layout = buffer->getLayout();
+       for (auto const& element : layout) {
+         glEnableVertexAttribArray(index);
+
+         glVertexAttribPointer(index, ////////////////
+           element.getComponentCount(), 
+           element.getComponentType(), 
+           element.m_normalized ? GL_TRUE : GL_FALSE, 
+           layout.getStride(), 
+           (const void*)element.m_offset); /////////////
+
+         index++;
+       }
+       m_buffers.push_back(buffer);
        buffer->unbind();
        unbind();
      }

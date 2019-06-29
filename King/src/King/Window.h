@@ -36,11 +36,14 @@ namespace King {
     void onUpdate();
     void onEvent(Event& e);
 
-	GLFWwindow* getNativeWindow() { return m_glfwWindow; };
+	  GLFWwindow* getNativeWindow() { return m_glfwWindow; };
     unsigned int getWidth() { return m_data.width; };
     unsigned int getHeight() { return m_data.height; };
     void setEventCallBack(const EventCallbackFn& callback) { m_data.EventCallBack = callback; };
     std::string getTitle() { return m_data.title; };
+    void setMousePos(double xPos, double yPos) { glfwSetCursorPos(m_glfwWindow, xPos, yPos); };
+    void disableCursor() { glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED); };
+    void enableCursor() { glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL); };
   private:
     void init(WindowData data);
     void shutdown();

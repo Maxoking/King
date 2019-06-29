@@ -1,6 +1,6 @@
 #pragma once
 #include "King/Layer.h"
-#include "King/Graphics/SimpleRenderer.h"
+#include "King/Graphics/Renderer/SimpleRenderer2D.h"
 #include "King/Input.h"
 #include "King/Application.h"
 

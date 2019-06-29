@@ -1,7 +1,7 @@
 #pragma once
 #include "King/Layer.h"
 #include "King/Application.h"
-#include "King/Graphics/SimpleRenderer.h"
+#include "King/Graphics/Renderer/SimpleRenderer2D.h"
 
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/matrix_transform.hpp"

@@ -4,9 +4,9 @@
 namespace King {
 
   class KING_API KeyEvent : public Event {
-    inline int getKeyCode() { return m_keyCode; };
 
   public:
+    inline int getKeyCode() { return m_keyCode; };
     std::string toString() const override
     {
       std::stringstream ss;
@@ -26,6 +26,8 @@ namespace King {
     virtual EventType getEventType() const override { return getStaticType(); };
     virtual const char* getName() const override { return "KeyPressed"; };
     virtual int getEventCategoryFlags() const override { return EventCategoryInput | EventCategoryKeyboard; };
+
+    inline int getRepeatCount() { return m_repeatCount; };
 
     std::string toString() const override
     {

@@ -14,7 +14,7 @@ ExampleLayer::ExampleLayer()
 	m_shader->setUniformMat4("proj_mat", m_projectionMatrix);
 	m_shader->setUniformMat4("view_mat", m_viewMatrix);
 	m_shader->unbind();
-	m_renderer = new King::graphics::SimpleRenderer();
+	m_renderer = new King::graphics::SimpleRenderer2D();
 }
 
 void ExampleLayer::onRender()
