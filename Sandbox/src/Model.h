@@ -1,9 +1,9 @@
 #pragma once
 #include "King/Core.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+//#include <assimp/Importer.hpp>
+//#include <assimp/scene.h>
+//#include <assimp/postprocess.h>
 
 #include "glad/glad.h"
 #include "glm/common.hpp"
