@@ -18,10 +18,11 @@ namespace King {
 		virtual void onDetach() {}
 		virtual void onUpdate() {}
 		virtual void onRender() {}
+    virtual void onImGuiRender() {}
 
 	  virtual void add(graphics::Renderable2D* renderable) { m_renderables.push_back(renderable); };
 
-    virtual void onEvent(Event& e) {}
+    virtual void onEvent(Event& e) { KING_TRACE(m_debugName); };
 
     inline const std::string getName() { return m_debugName; }
   protected:

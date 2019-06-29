@@ -7,22 +7,16 @@ namespace King {
   class KING_API ImGuiLayer : public Layer {
   public:
     ImGuiLayer();
-    ~ImGuiLayer();
+    ~ImGuiLayer() = default;
 
-    void onAttach() override;
-    void onDetach() override;
-    void onEvent(Event& e) override;
-    void onUpdate() override;
+    virtual void onAttach() override;
+    virtual void onDetach() override;
+    virtual void onImGuiRender() override;
 
-
+    void begin();
+    void end();
   private:
-    float m_time;
-
-    bool onMousePressed(MouseButtonPressed& e);
-    bool onMouseReleased(MouseButtonReleased& e);
-    bool onMouseMoved(MouseMoved& e);
-    bool onKeyPressed(KeyPressedEvent& e);
-    bool onKeyReleased(KeyReleasedEvent& e);
+    float m_time = 0.0f;
 
   };
 

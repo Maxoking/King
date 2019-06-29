@@ -26,6 +26,9 @@ namespace King {
     m_window = std::unique_ptr<Window>(Window::createWindow());
     m_window->setEventCallBack(BIND_FN(onEvent));
 
+   /* m_imGuiLayer = new ImGuiLayer();
+    pushOverlay(m_imGuiLayer);*/
+
   }
 
   void Application::pushLayer(Layer * layer)
@@ -88,15 +91,9 @@ namespace King {
     
     while (m_running) {
 
-	  //shader.setUniform2f("light_pos", { m_mouseX, m_mouseY });
-
-	  /*shader.setUniformMat4("proj_mat", projectionMatrix);*/
       glClearColor(0, 1, 0.4f, 1);
       
       glClear(GL_COLOR_BUFFER_BIT);
-
-	 /* renderer.submit(&sprite1);
-	  renderer.flush();*/
 
 
       for (Layer* layer : m_stack) {
@@ -106,6 +103,12 @@ namespace King {
 	    for (Layer* layer : m_stack) {
 		    layer->onRender();
 	    }
+
+     /* m_imGuiLayer->begin();
+      for (Layer* layer : m_stack) {
+        layer->onImGuiRender();
+      }
+      m_imGuiLayer->end();*/
 
 
       m_window->onUpdate();

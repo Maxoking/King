@@ -6,6 +6,7 @@
 #include "King/Events/MouseEvent.h"
 #include "King/Events/KeyEvent.h"
 #include "LayerStack.h"
+#include "ImGUI/ImGuiLayer.h"
 
 #include "King/Graphics/Buffers/Buffer.h"
 #include "King/Graphics/Buffers/VertexArray.h"
@@ -26,9 +27,8 @@ namespace King {
   private:
     static Application* s_instance;
     std::unique_ptr<Window> m_window;
+    ImGuiLayer* m_imGuiLayer;
     bool m_running = true;
-    std::shared_ptr<graphics::Shader> m_Shader;
-    std::shared_ptr<graphics::VertexArray> m_VertexArray;
   public:
     inline static Application& get() { return *s_instance; }
     inline float getApectRatio() { return (float)m_window->getWidth() / (float)m_window->getHeight(); };

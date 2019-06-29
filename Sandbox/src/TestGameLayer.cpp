@@ -1,6 +1,7 @@
 
 #include "TestGameLayer.h"
 
+
 #define BIND_FN(x) std::bind(&TestGameLayer::x, this, std::placeholders::_1)
 
 TestGameLayer::TestGameLayer() {
@@ -144,6 +145,7 @@ void TestGameLayer::onEvent(Event& e) {
 }
 
 bool TestGameLayer::onMousePressed(King::MouseButtonPressed e) {
+  KING_TRACE(e);
   if (e.getKeyCode() == GLFW_MOUSE_BUTTON_2) {
     Application::get().getWindow().disableCursor();
     camMode = true;
@@ -160,7 +162,7 @@ bool TestGameLayer::onMouseReleased(King::MouseButtonReleased e) {
 }
 
 bool TestGameLayer::onMouseMoved(King::MouseMoved e) {
-
+   KING_TRACE(e);
    if (camMode) {
      float xOffset = m_windowCenter.first - Input::getMouseX();
      float yOffset = m_windowCenter.second - Input::getMouseY();
@@ -172,6 +174,7 @@ bool TestGameLayer::onMouseMoved(King::MouseMoved e) {
 
 bool TestGameLayer::onKeyPressed(King::KeyPressedEvent e)
 {
+  KING_TRACE(e);
   if (e.getRepeatCount() == 0) {
     if (e.getKeyCode() == GLFW_KEY_D) {
       m_camVelocity.x += camspeed;
@@ -197,6 +200,8 @@ bool TestGameLayer::onKeyPressed(King::KeyPressedEvent e)
 }
 
 bool TestGameLayer::onKeyReleased(King::KeyReleasedEvent e) {
+
+  KING_TRACE(e);
   switch (e.getKeyCode()) {
   case GLFW_KEY_W:
     m_camVelocity.z -= camspeed;
@@ -213,3 +218,10 @@ bool TestGameLayer::onKeyReleased(King::KeyReleasedEvent e) {
   }
   return false;
 }
+
+//void TestGameLayer::onImGuiRender()
+//{
+//  ImGui::Begin("Test");
+//  ImGui::Text("Hello World");
+//  ImGui::End();
+//}
