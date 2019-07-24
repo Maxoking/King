@@ -214,12 +214,6 @@ void TestGameLayer::onRender()
   m_renderer->flush();
   m_renderer->end();
 
-  m_renderer->begin(m_lightShader, m_camera);
-  m_lightShader->setUniform3f("light_color", m_light->getColor() * m_light->getIntensity());
-  m_renderer->submit(m_lightSphere);
-  m_renderer->flush();
-  m_renderer->end();
-
 }
 
 void TestGameLayer::onEvent(Event& e) {

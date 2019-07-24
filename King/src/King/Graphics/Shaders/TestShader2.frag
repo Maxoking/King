@@ -43,7 +43,8 @@ vec3 calculateDirLight(Light light, vec3 normal, vec3 viewDir) {
 	float bias = 0.005;
 	float shadow = 1.0;	
 	if ( texture( shadow_map, shadowCoords.xy ).z  <  shadowCoords.z - bias){
-		shadow = 0.5;
+		shadow = 0.1;
+		//shadow = 0.5;
 	}
 
 	if(shadowCoords.z > 1.f) {
@@ -58,7 +59,8 @@ vec3 calculateDirLight(Light light, vec3 normal, vec3 viewDir) {
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess); 
 
-	vec3 ambient = 0.25f * light.color * material.diffuse;
+	//vec3 ambient = 0.25f * light.color * material.diffuse;
+	vec3 ambient = 0.25f * light.color * vec3(texture(ourTexture, v_TexCoord));
 	//vec3 diffuse  = light.intensity  * diff * light.color * material.diffuse;
 	vec3 diffuse  = light.intensity  * diff * light.color * vec3(texture(ourTexture, v_TexCoord));
     //vec3 specular = light.intensity * spec * light.color * material.specular;
@@ -121,5 +123,4 @@ void main()
 
 	
 	color = vec4(result, 1.0);
-	//color = texture(ourTexture, v_TexCoord);
 }

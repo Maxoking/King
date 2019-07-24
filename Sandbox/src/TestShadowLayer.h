@@ -11,6 +11,8 @@
 #include "King/Events/KeyEvent.h"
 #include "King/Graphics/Renderable.h"
 #include "King/Graphics/Buffers/FrameBuffer.h"
+#include "King/Graphics/Textures/Texture2D.h"
+#include "King/Graphics/Textures/TextureDepth.h"
 
 #include "imgui.h"
 #include "King/Input.h"
@@ -44,7 +46,7 @@ public:
 private:
   float m_camSpeedForward;
   float m_camSpeedRight;
-  float camspeed = 1.f;
+  float camspeed = 3.f;
   glm::vec3 m_camVelocity;
   float m_sensitivity;
 	float m_mousespeed;
@@ -64,6 +66,8 @@ private:
   glm::mat4 m_lightProjection;
   glm::mat4 m_lightSpaceMatrix;
   GLuint m_depthTexture, m_FBO, m_texture;
+	graphics::Texture2D* m_tex2D;
+	graphics::TextureDepth* m_texDepth;
   std::vector<graphics::Light*> m_lights;
 
 };

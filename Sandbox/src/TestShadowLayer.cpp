@@ -40,7 +40,7 @@ TestShadowLayer::TestShadowLayer() {
   m_lights.push_back(m_light);
 
   graphics::PointLight* pl = new graphics::PointLight();
-  pl->setPos(glm::vec3(0.f, 2.5f, 0.f));
+  pl->setPos(glm::vec3(0.f, 5.f, 0.f));
   pl->setIntensity(0.5f);
   m_lights.push_back(pl);
 
@@ -53,13 +53,13 @@ TestShadowLayer::TestShadowLayer() {
   //m_renderable->getMaterial().shininess = 32.f;
   //m_renderables.push_back(m_renderable);
 
-  /*m_lamp = new graphics::Renderable(m_light->getPos());
-  m_lamp->loadModel("res/models/smoothsphere.obj");
-  m_lamp->setColor(glm::vec3(0.7f, 0.4f, 0.3f));
-  m_lamp->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
-  m_lamp->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
-  m_lamp->getMaterial().shininess = 32.f;
-  m_renderables.push_back(m_lamp);*/
+  //m_lamp = new graphics::Renderable(pl->getPos());
+  //m_lamp->loadModel("res/models/smoothsphere.obj");
+  //m_lamp->setColor(glm::vec3(0.7f, 0.4f, 0.3f));
+  //m_lamp->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
+  //m_lamp->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
+  //m_lamp->getMaterial().shininess = 32.f;
+  //m_renderables.push_back(m_lamp);
 
 
   graphics::Renderable* monkey = new graphics::Renderable(glm::vec3(0.f, 3.f, 4.f));
@@ -70,12 +70,12 @@ TestShadowLayer::TestShadowLayer() {
   monkey->getMaterial().shininess = 32.f;
   m_renderables.push_back(monkey);
 
- /* m_floor = new graphics::Renderable(glm::vec3(0.f));
-  m_floor->loadModel("res/models/plane.obj");
+  m_floor = new graphics::Renderable(glm::vec3(0.f));
+  m_floor->loadModel("res/models/PlaneWithUV.obj");
   m_floor->getMaterial().diffuse = glm::vec3(0.45f, 0.4f, 0.7f);
   m_floor->getMaterial().specular = glm::vec3(0.45f, 0.4f, 0.7f);
   m_floor->getMaterial().shininess = 16.f;
-  m_renderables.push_back(m_floor);*/
+  m_renderables.push_back(m_floor);
 
 
 
@@ -83,50 +83,15 @@ TestShadowLayer::TestShadowLayer() {
   m_lastTime = Application::getTime();
   camMode = false;
 
-  int width, height, nrChannels;
-  //unsigned char *data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
-  unsigned char *data = loadImage("res/textures/container.jpg", &width, &height, &nrChannels);
-  if (data) {
-    glGenTextures(1, &m_texture);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  }
-  else {
-    KING_FATAL("COULD NOT LOAD TEXTURE");
-  }
-   
-  stbi_image_free(data);
+	m_tex2D = new graphics::Texture2D("res/textures/container.jpg");
 
   m_depthBuffer = new graphics::FrameBuffer();
 
   //The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
-  //glGenFramebuffers(1, &m_FBO);
-  //glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
   m_depthBuffer->bind();
 
-  // Depth texture. Slower than a depth buffer, but you can sample it later in your shader
-  glGenTextures(1, &m_depthTexture);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-  float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-  glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-
-  //glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_depthTexture, 0);
-  m_depthBuffer->attachDepthAttachment(m_depthTexture);
+	m_texDepth = new graphics::TextureDepth(1024, 1024);
+	m_depthBuffer->attachDepthAttachment(m_texDepth->getID());
 
   glDrawBuffer(GL_NONE); // No color buffer is drawn to.
 
@@ -177,13 +142,13 @@ void TestShadowLayer::onUpdate() {
  
 
 
- /* glm::vec3 lightpos = m_light->getPos();
+  glm::vec3 lightpos = m_light->getPos();
   glm::vec3 rot =  glm::rotateZ(lightpos, 0.25f * deltaTime);
   m_light->setPos(rot);
 
   m_light->setIntensity(rot.y / 40.f);
 
-  if (m_light->getPos().y < 0) m_light->setIntensity(0.f);*/
+  if (m_light->getPos().y < 0) m_light->setIntensity(0.f);
 
   m_lightView = glm::lookAt(m_light->getPos(),
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -200,8 +165,7 @@ void TestShadowLayer::onRender()
   m_depthBuffer->bind();
   glViewport(0, 0, 1024, 1024);
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	m_depthBuffer->clearDepth();
   ((graphics::SimpleRenderer3D*)m_renderer)->beginShadowPass(m_shadowShader, m_lightSpaceMatrix, m_renderables);
 
   for (int i = 0; i < m_renderables.size(); i++) {
@@ -218,10 +182,12 @@ void TestShadowLayer::onRender()
   glViewport(0, 0, Application::get().getWindow().getWidth(), Application::get().getWindow().getHeight());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
+	m_tex2D->bind(0);
+	m_texDepth->bind(1);
+
   m_renderer->begin(m_shader, m_camera, m_lights, m_lightSpaceMatrix);
 
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, m_depthTexture);
+ 
  
 
   for (int i = 0; i < m_renderables.size(); i++) {

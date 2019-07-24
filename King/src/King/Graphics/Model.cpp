@@ -27,7 +27,7 @@ namespace King {
       const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
       if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
       {
-        KING_CORE_ERROR("ASSIMP Error!");
+        KING_CORE_ERROR("Model konnte nicht geladen werden!");
         return;
       }
       std::string directory = path.substr(0, path.find_last_of('/'));
@@ -85,17 +85,22 @@ namespace King {
 
       }
 
+			if (mesh->mTextureCoords[0]) {
+				KING_CORE_INFO("TexCoords vorhanden.");
+				for (unsigned int i = 0; i < mesh->mNumVertices; i++)	{
 
-      for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-      {
+					/*normals.push_back(mesh->mNormals[i].x);
+					normals.push_back(mesh->mNormals[i].y);
+					normals.push_back(mesh->mNormals[i].z);*/
 
-        /*normals.push_back(mesh->mNormals[i].x);
-        normals.push_back(mesh->mNormals[i].y);
-        normals.push_back(mesh->mNormals[i].z);*/
+					texCoords.push_back({ mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y });
 
-          texCoords.push_back({ mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y});
-       
-      }
+				}
+			}	else {
+				KING_CORE_INFO("Keine TexCoords vorhanden.");
+			}
+
+     
     
       
      
@@ -117,8 +122,10 @@ namespace King {
         verticesWithNormalsAndTexCoords.push_back(normals[i].x);
         verticesWithNormalsAndTexCoords.push_back(normals[i].y);
         verticesWithNormalsAndTexCoords.push_back(normals[i].z);
-        verticesWithNormalsAndTexCoords.push_back(texCoords[i].x);
-        verticesWithNormalsAndTexCoords.push_back(texCoords[i].y);
+				if (mesh->mTextureCoords[0]) {
+					verticesWithNormalsAndTexCoords.push_back(texCoords[i].x);
+					verticesWithNormalsAndTexCoords.push_back(texCoords[i].y);
+				}
       }
 
       return Mesh(verticesWithNormalsAndTexCoords, indices);

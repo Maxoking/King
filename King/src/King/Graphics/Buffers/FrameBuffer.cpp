@@ -19,6 +19,18 @@ namespace King {
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+		void FrameBuffer::clearDepth() {
+			glClear(GL_DEPTH_BUFFER_BIT);
+		}
+
+		void FrameBuffer::clearColor() {
+			glClear(GL_COLOR_BUFFER_BIT);
+		}
+
+		void FrameBuffer::clearStencil() {
+			glClear(GL_STENCIL_BUFFER_BIT);
+		}
+
     void FrameBuffer::attachColorAttachment(GLuint textureID) {
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);
     }

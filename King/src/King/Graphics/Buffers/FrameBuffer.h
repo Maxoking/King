@@ -13,6 +13,9 @@ namespace King {
       FrameBuffer();
       void bind();
       void unbind();
+			void clearDepth();
+			void clearColor();
+			void clearStencil();
       void attachColorAttachment(GLuint textureID);
       void attachDepthAttachment(GLuint textureID);
       void attachStencilAttachment(GLuint textureID);
