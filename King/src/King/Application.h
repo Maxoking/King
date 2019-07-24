@@ -38,7 +38,6 @@ namespace King {
     void pushLayer(Layer* layer);
     void pushOverlay(Layer* layer);
     void onEvent(Event& e);
-    bool onMouseMoved(MouseMoved & e);
     bool onWindowClose(WindowCloseEvent& e);
     bool onWindowRezise(WindowResizeEvent& e);
     bool onKeyPressed(KeyPressedEvent & e);

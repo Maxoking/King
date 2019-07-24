@@ -14,6 +14,7 @@ namespace King {
     public:
       Buffer(GLfloat* data, GLsizei size, GLuint components);
       Buffer(GLfloat * data, uint32_t size);
+      Buffer(glm::vec3* data, uint32_t size);
       void bind();
       void unbind();
 

@@ -2,14 +2,12 @@
 #include "kngpch.h"
 
 #include "Application.h"
-#include "utils/glmutils.h"
 #include "utils/fileutils.h"
 #include "Graphics/Shader.h"
 #include "Graphics/Buffers/VertexArray.h"
 #include "Graphics/Buffers/Buffer.h"
 #include "Graphics/Buffers/IndexBuffer.h"
 #include "Graphics/Renderable2D.h"
-#include "Graphics/Renderer/SimpleRenderer2D.h"
 #include "Graphics/Buffers/BufferLayout.h"
 #include "glad/glad.h"
 
@@ -26,8 +24,8 @@ namespace King {
     m_window = std::unique_ptr<Window>(Window::createWindow());
     m_window->setEventCallBack(BIND_FN(onEvent));
 
-   /* m_imGuiLayer = new ImGuiLayer();
-    pushOverlay(m_imGuiLayer);*/
+    m_imGuiLayer = new ImGuiLayer();
+    pushOverlay(m_imGuiLayer);
 
   }
 
@@ -47,7 +45,6 @@ namespace King {
   {
     EventDispatcher dispatcher(e);
     dispatcher.dispatch<WindowCloseEvent>(BIND_FN(onWindowClose));
-    dispatcher.dispatch<MouseMoved>(BIND_FN(onMouseMoved));
     dispatcher.dispatch<KeyPressedEvent>(BIND_FN(onKeyPressed));
 
     for (auto it = m_stack.end(); it != m_stack.begin();) {
@@ -61,13 +58,9 @@ namespace King {
   {
     if(e.getKeyCode() == GLFW_KEY_ESCAPE)
       m_running = false;
-    return true;
+    return false;
   }
   
-  bool Application::onMouseMoved(MouseMoved& e)
-  {
-    return true;
-  }
 
   bool Application::onWindowClose(WindowCloseEvent& e)
   {
@@ -77,7 +70,6 @@ namespace King {
 
   bool Application::onWindowRezise(WindowResizeEvent & e)
   {
-    KING_CORE_TRACE(e);
     return true;
   }
 
@@ -89,11 +81,19 @@ namespace King {
 
   void Application::run() {
     
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
     while (m_running) {
 
-      glClearColor(0, 1, 0.4f, 1);
+
+     /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
       
-      glClear(GL_COLOR_BUFFER_BIT);
+
+      glClearColor(0.7f, 0.3f, 0.4f, 1);
+
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
       for (Layer* layer : m_stack) {
@@ -104,11 +104,11 @@ namespace King {
 		    layer->onRender();
 	    }
 
-     /* m_imGuiLayer->begin();
+      m_imGuiLayer->begin();
       for (Layer* layer : m_stack) {
         layer->onImGuiRender();
       }
-      m_imGuiLayer->end();*/
+      m_imGuiLayer->end();
 
 
       m_window->onUpdate();

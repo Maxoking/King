@@ -12,23 +12,28 @@ namespace King {
     class KING_API Camera {
     public:
       Camera(const glm::vec3& pos, float fov, float aspectRatio, float zNear, float zFar);
-      inline const glm::mat4& const getViewMatrix() { return m_viewMatrix; };
-      inline const glm::mat4& const getProjectionMatrix() { return m_projectionMatrix; };
+      inline const glm::mat4& getViewMatrix() const { return m_viewMatrix; };
+      inline const glm::mat4& getProjectionMatrix() const { return m_projectionMatrix; };
+      void setProjectionMatrix(glm::mat4 proj) { m_projectionMatrix = proj; };
+      void setViewMatrix(glm::mat4 view) { m_viewMatrix = view; };
+
+      inline const glm::mat4& getViewProjectionMatrix() const { return m_projectionMatrix * m_viewMatrix; };
+
       void updateCameraMatrices();
 
       void setPos(glm::vec3 position) { m_position = position; };
-      inline const glm::vec3& const getPos() { return m_position; };
+      inline const glm::vec3& getPos() const { return m_position; };
 
       void setUp(glm::vec3 up) { m_upVector = up; };
-      inline const glm::vec3& const getUp() { return m_upVector; };
+      inline const glm::vec3& getUp() const { return m_upVector; };
 
       void setDir(glm::vec3 direction) { m_direction = direction; };
-      inline const glm::vec3& const getDir() { return m_direction; };
+      inline const glm::vec3& getDir() const { return m_direction; };
 
       void setYaw(float yaw) { m_yaw = yaw; };
-      inline const float& const getYaw() { return m_yaw; };
+      inline const float& getYaw() const { return m_yaw; };
       void setPitch(float pitch) { m_pitch = pitch; };
-      inline const float& const getPitch() { return m_pitch; };
+      inline const float& getPitch() const { return m_pitch; };
     private:
       glm::vec3 m_worldUp;
       glm::vec3 m_position, m_upVector, m_direction;

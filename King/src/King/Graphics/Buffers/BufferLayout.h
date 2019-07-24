@@ -1,6 +1,7 @@
 #pragma once
 #include "King/Core.h"
 #include "glad/glad.h"
+#include "glm/glm.hpp"
 
 namespace King {
   namespace graphics {

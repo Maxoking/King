@@ -15,6 +15,8 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "King/vendor/GLFW/include"
 IncludeDir["Glad"] = "King/vendor/Glad/include"
 IncludeDir["ImGUI"] = "King/vendor/ImGUI/"
+IncludeDir["Assimp"] = "King/vendor/Assimp/include"
+IncludeDir["stb_image"] = "King/vendor/stb_image"
 
 include "King/vendor/GLFW"
 include "King/vendor/Glad"
@@ -22,9 +24,10 @@ include "King/vendor/ImGUI"
 
 project "King"
 	location "King"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -35,12 +38,11 @@ project "King"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/src/**.vert",
+		"%{prj.name}/src/**.frag"
 	}
-	postbuildcommands
-	{
-		"{COPY}  %{cfg.targetdir}/King.dll  %{cfg.targetdir}/../Sandbox"
-	}
+
 
 	includedirs
 	{
@@ -49,7 +51,14 @@ project "King"
 		"%{prj.name}/vendor/glm",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGUI}"
+		"%{IncludeDir.ImGUI}",
+		"%{IncludeDir.Assimp}",
+		"%{IncludeDir.stb_image}"
+	}
+	
+	libdirs
+	{
+		"King/vendor/Assimp/lib"
 	}
 
 	links 
@@ -57,11 +66,11 @@ project "King"
 		"GLFW",
 		"Glad",
 		"ImGUI",
+		"assimpd.lib",
 		"opengl32.lib"
 	}
 
-	cppdialect "C++17"
-	staticruntime "On"
+
 	systemversion "latest"
 
 	defines
@@ -71,29 +80,31 @@ project "King"
 	}
 
 
-
-
 	filter "configurations:Debug"
 		defines "KING_DEBUG"
-		symbols "On"
-		buildoptions "/MDd"
+		runtime "Debug"
+		symbols "on"
 
 
 	filter "configurations:Release"
 		defines "KING_RELEASE"
-		symbols "On"
-		buildoptions "/MD"
+		runtime "Release"
+		optimize "on"
 
 
 	filter "configurations:Dist"
 		defines "KING_DIST"
-		symbols "On"
-		buildoptions "/MD"
+		runtime "Release"
+		optimize "on"
+
+
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -109,6 +120,8 @@ project "Sandbox"
 	{
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGUI}",
+		"%{IncludeDir.Assimp}",
 		"King/vendor/spdlog/include",
 		"King/vendor/glm",
 		"King/src"
@@ -116,33 +129,29 @@ project "Sandbox"
 
 	links
 	{
-		"King",
-		"Glad"
+		"King"
 	}
+	
+	systemversion "latest"
 
 	defines
 	{
 		"GLFW_INCLUDE_NONE"
 	}
 
-	cppdialect "C++17"
-	staticruntime "On"
-	systemversion "latest"
-	staticruntime "off"
+
 
 	filter "configurations:Debug"
 		defines "KING_DEBUG"
-		symbols "On"		
-		buildoptions "/MDd"
-
+		runtime "Debug"
+		symbols "on"		
 
 	filter "configurations:Release"
 		defines "KING_RELEASE"
-		symbols "On"
-		buildoptions "/MD"
-
+		runtime "Release"
+		symbols "on"
 
 	filter "configurations:Dist"
 		defines "KING_DIST"
-		symbols "On"
-		buildoptions "/MD"
+		runtime "Release"
+		symbols "on"

@@ -11,6 +11,8 @@ namespace King {
 
     virtual void onAttach() override;
     virtual void onDetach() override;
+    virtual void onEvent(Event& e) override;
+    bool onMousePressed(Event& e);
     virtual void onImGuiRender() override;
 
     void begin();

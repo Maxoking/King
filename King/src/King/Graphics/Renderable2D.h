@@ -24,8 +24,8 @@ namespace King {
 			inline IndexBuffer* getIBO() { return m_ibo; };
 			inline Shader* const getShader() { return m_shader; };
 
-			inline glm::vec3& const getPosition() { return m_position ; };
-			inline glm::vec2& const getSize() { return m_size; };
+			inline const glm::vec3& getPosition() const { return m_position ; };
+			inline const glm::vec2& getSize() const { return m_size; };
 		};
 	}
 }

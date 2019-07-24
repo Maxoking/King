@@ -20,9 +20,8 @@ namespace King {
 		virtual void onRender() {}
     virtual void onImGuiRender() {}
 
-	  virtual void add(graphics::Renderable2D* renderable) { m_renderables.push_back(renderable); };
 
-    virtual void onEvent(Event& e) { KING_TRACE(m_debugName); };
+    virtual void onEvent(Event& e) {};
 
     inline const std::string getName() { return m_debugName; }
   protected:
@@ -31,7 +30,6 @@ namespace King {
 	  glm::mat4 m_viewMatrix;
 	  graphics::Renderer* m_renderer;
 	  graphics::Shader* m_shader;
-	  std::vector<graphics::Renderable2D*> m_renderables;
     std::vector<std::shared_ptr<graphics::VertexArray>> m_vaos;
   };
 

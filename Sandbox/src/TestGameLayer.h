@@ -6,14 +6,18 @@
 #include "King/Graphics/Buffers/VertexArray.h"
 #include "King/Graphics/Buffers/IndexBuffer.h"
 #include "King/Graphics/Buffers/Buffer.h"
-#include "Model.h"
+#include "King/Graphics/Model.h"
 #include "King/Graphics/Camera.h"
 #include "King/Events/KeyEvent.h"
+#include "King/Graphics/Renderable.h"
+#include "King/Graphics/Buffers/FrameBuffer.h"
 
+#include "imgui.h"
 #include "King/Input.h"
-
+#include "King/utils/SimpleOBJLoader.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/random.hpp"
 #include "GLFW/glfw3.h"
 
 
@@ -33,22 +37,32 @@ public:
   bool onKeyPressed(King::KeyPressedEvent e);
   bool onKeyReleased(King::KeyReleasedEvent e);
   bool onMouseMoved(King::MouseMoved e);
-  //void onImGuiRender() override;
+  void onImGuiRender() override;
 
 
 
 private:
   float m_camSpeedForward;
   float m_camSpeedRight;
-  float camspeed = 0.0025f;
+  float camspeed = 0.015f;
   glm::vec3 m_camVelocity;
   float m_sensitivity;
-  float m_lastTime;
+  double m_lastTime;
   bool camMode;
+  std::vector<graphics::Renderable*> m_renderables;
   std::pair<float, float> m_windowCenter;
-  std::shared_ptr<graphics::VertexArray> m_VertexArray;
-//  std::shared_ptr<graphics::Model> m_model;
-  std::shared_ptr<graphics::Camera> m_camera;
-  
+  graphics::Camera* m_camera;
+  graphics::Renderable* m_lightSphere;
+  graphics::Renderable* m_renderable;
+  graphics::Renderable* m_floor;
+  graphics::Shader* m_lightShader;
+  graphics::Shader* m_shadowShader;
+  graphics::Light* m_light;
+  graphics::FrameBuffer* m_depthBuffer;
+  glm::mat4 m_lightView;
+  glm::mat4 m_lightProjection;
+  glm::mat4 m_lightSpaceMatrix;
+  GLuint m_shadowMap;
+  std::vector<graphics::Light*> m_lights;
 
 };

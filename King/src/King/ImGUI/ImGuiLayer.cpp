@@ -8,6 +8,8 @@
 #include "examples/imgui_impl_glfw.h"
 #include "GLFW/glfw3.h"
 
+#define BIND_FN(x) std::bind(&ImGuiLayer::x, this, std::placeholders::_1)
+
 
 namespace King {
 
@@ -56,10 +58,22 @@ namespace King {
     ImGui::DestroyContext();
   }
 
+  void ImGuiLayer::onEvent(Event & e)
+  {
+    King::EventDispatcher dispatcher(e);
+    dispatcher.dispatch<King::MouseButtonPressed>(BIND_FN(onMousePressed));
+
+  }
+
+  bool ImGuiLayer::onMousePressed(Event & e)
+  {
+    return false;
+  }
+
   void ImGuiLayer::onImGuiRender()
   {
-    static bool show = true;
-    ImGui::ShowDemoWindow(&show);
+    static bool show = false;
+    //ImGui::ShowDemoWindow(&show);
   }
 
   void ImGuiLayer::begin()

@@ -1,6 +1,7 @@
 #pragma once
 #include "King/Core.h"
 #include "glad/glad.h"
+#include "glm/glm.hpp"
 
 namespace King {
 	namespace graphics {
@@ -11,6 +12,7 @@ namespace King {
 			GLuint m_count;
 		public:
 			IndexBuffer(GLuint * data, GLsizei count);
+      //IndexBuffer(glm::vec3 * data, GLsizei count);
 			void bind();
 			void unbind();
 
