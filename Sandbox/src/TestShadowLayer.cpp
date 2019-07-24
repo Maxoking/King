@@ -29,7 +29,7 @@ TestShadowLayer::TestShadowLayer() {
   m_camVelocity = glm::vec3(0.f);
   m_camSpeedForward = 0.f;
   m_camSpeedRight = 0.f;
-  m_sensitivity = 0.25f;
+  m_sensitivity = 15.f;
   m_windowCenter.first = (float)(Application::get().getWindow().getWidth()) / 2.f;
   m_windowCenter.second = (float)(Application::get().getWindow().getHeight()) / 2.f;
 
@@ -142,13 +142,13 @@ void TestShadowLayer::onUpdate() {
  
 
 
-  glm::vec3 lightpos = m_light->getPos();
-  glm::vec3 rot =  glm::rotateZ(lightpos, 0.25f * deltaTime);
-  m_light->setPos(rot);
+  //glm::vec3 lightpos = m_light->getPos();
+  //glm::vec3 rot =  glm::rotateZ(lightpos, 0.25f * deltaTime);
+  //m_light->setPos(rot);
 
-  m_light->setIntensity(rot.y / 40.f);
+  //m_light->setIntensity(rot.y / 40.f);
 
-  if (m_light->getPos().y < 0) m_light->setIntensity(0.f);
+  //if (m_light->getPos().y < 0) m_light->setIntensity(0.f);
 
   m_lightView = glm::lookAt(m_light->getPos(),
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -180,7 +180,8 @@ void TestShadowLayer::onRender()
 
   //2nd renderpass
   glViewport(0, 0, Application::get().getWindow().getWidth(), Application::get().getWindow().getHeight());
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT);
   
 	m_tex2D->bind(0);
 	m_texDepth->bind(1);
@@ -302,6 +303,7 @@ void TestShadowLayer::onImGuiRender()
 
   ImGui::Begin("FPS");
   ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::Text("%.3f mousespeed", m_mousespeed);
   ImGui::End();
 
 }

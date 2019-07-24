@@ -65,7 +65,6 @@ private:
   glm::mat4 m_lightView;
   glm::mat4 m_lightProjection;
   glm::mat4 m_lightSpaceMatrix;
-  GLuint m_depthTexture, m_FBO, m_texture;
 	graphics::Texture2D* m_tex2D;
 	graphics::TextureDepth* m_texDepth;
   std::vector<graphics::Light*> m_lights;

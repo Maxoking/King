@@ -85,10 +85,12 @@ namespace King {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glfwSwapInterval(0);
+
     while (m_running) {
 
 
-     /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
       
 
       glClearColor(0.7f, 0.3f, 0.4f, 1);
