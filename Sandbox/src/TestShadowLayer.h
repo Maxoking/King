@@ -44,9 +44,10 @@ public:
 private:
   float m_camSpeedForward;
   float m_camSpeedRight;
-  float camspeed = 0.015f;
+  float camspeed = 1.f;
   glm::vec3 m_camVelocity;
   float m_sensitivity;
+	float m_mousespeed;
   double m_lastTime;
   bool camMode;
   std::vector<graphics::Renderable*> m_renderables;

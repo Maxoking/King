@@ -162,15 +162,16 @@ void TestShadowLayer::onUpdate() {
 
   if (camMode) {
     Application::get().getWindow().setMousePos(m_windowCenter.first, m_windowCenter.second);
+		m_mousespeed = m_sensitivity * deltaTime;
   }
   
 
 
   glm::vec3 forwardVec = glm::normalize(m_camera->getDir());
   glm::vec3 rightVec = glm::normalize(glm::cross(m_camera->getDir(), m_camera->getUp()));
-  m_camera->setPos(m_camera->getPos() + rightVec * m_camVelocity.x);
-  m_camera->setPos(m_camera->getPos() + forwardVec * m_camVelocity.z);
-  m_camera->setPos(m_camera->getPos() + m_camera->getUp() * m_camVelocity.y);
+  m_camera->setPos(m_camera->getPos() + rightVec * m_camVelocity.x * deltaTime);
+  m_camera->setPos(m_camera->getPos() + forwardVec * m_camVelocity.z * deltaTime);
+  m_camera->setPos(m_camera->getPos() + m_camera->getUp() * m_camVelocity.y * deltaTime);
   m_camera->updateCameraMatrices();
 
  
@@ -262,8 +263,8 @@ bool TestShadowLayer::onMouseMoved(King::MouseMoved e) {
    if (camMode) {
      float xOffset = m_windowCenter.first - Input::getMouseX();
      float yOffset = m_windowCenter.second - Input::getMouseY();
-     m_camera->setYaw(m_camera->getYaw() - xOffset * m_sensitivity);
-     m_camera->setPitch(m_camera->getPitch() + yOffset * m_sensitivity);
+     m_camera->setYaw(m_camera->getYaw() - xOffset * m_mousespeed);
+     m_camera->setPitch(m_camera->getPitch() + yOffset * m_mousespeed);
    }
   return true;
 }
