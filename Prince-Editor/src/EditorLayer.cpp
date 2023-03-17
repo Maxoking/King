@@ -18,10 +18,10 @@ EditorLayer::EditorLayer() {
 	m_shader = new graphics::Shader("D:/dev/King/King/src/King/Graphics/Shaders/TestShader2.vert",
 		"D:/dev/King/King/src/King/Graphics/Shaders/TestShader2.frag");
 
-	m_lightShader = new graphics::Shader("C:/dev/King/King/src/King/Graphics/Shaders/lightShader.vert",
+	m_lightShader = new graphics::Shader("D:/dev/King/King/src/King/Graphics/Shaders/lightShader.vert",
 		"D:/dev/King/King/src/King/Graphics/Shaders/lightShader.frag");
 
-	m_shadowShader = new graphics::Shader("C:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.vert",
+	m_shadowShader = new graphics::Shader("D:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.vert",
 		"D:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.frag");
 
 

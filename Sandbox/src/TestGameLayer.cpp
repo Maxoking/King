@@ -15,14 +15,14 @@ TestGameLayer::TestGameLayer() {
     1000.f);
 
   
-  m_shader = new graphics::Shader("C:/dev/King/King/src/King/Graphics/Shaders/testShader.vert",
-    "C:/dev/King/King/src/King/Graphics/Shaders/testShader.frag");
+  m_shader = new graphics::Shader("D:/dev/King/King/src/King/Graphics/Shaders/testShader.vert",
+    "D:/dev/King/King/src/King/Graphics/Shaders/testShader.frag");
 
-  m_lightShader = new graphics::Shader("C:/dev/King/King/src/King/Graphics/Shaders/lightShader.vert",
-    "C:/dev/King/King/src/King/Graphics/Shaders/lightShader.frag");
+  m_lightShader = new graphics::Shader("D:/dev/King/King/src/King/Graphics/Shaders/lightShader.vert",
+    "D:/dev/King/King/src/King/Graphics/Shaders/lightShader.frag");
 
-  m_shadowShader = new graphics::Shader("C:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.vert",
-    "C:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.frag");
+  m_shadowShader = new graphics::Shader("D:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.vert",
+    "D:/dev/King/King/src/King/Graphics/Shaders/simpleShadowShader.frag");
 
 
   m_camVelocity = glm::vec3(0.f);
@@ -329,7 +329,7 @@ void TestGameLayer::onImGuiRender()
   ImGui::InputFloat("object shininess", (float*)&m_renderable->getMaterial().shininess);
 
 
-  for (auto& integrator : std::filesystem::directory_iterator("C:/dev/King/Sandbox/res/models")) {
+  for (auto& integrator : std::filesystem::directory_iterator("D:/dev/King/Sandbox/res/models")) {
     std::string string = integrator.path().filename().string();
     if (ImGui::Button(string.c_str())) {
       m_renderable->loadModel("res/models/" + string);
