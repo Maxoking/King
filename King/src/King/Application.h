@@ -34,7 +34,7 @@ namespace King {
     inline float getApectRatio() { return (float)m_window->getWidth() / (float)m_window->getHeight(); };
     double static getTime() { return glfwGetTime(); };
 
-    Application();
+    Application(const std::string& name = "King App");
     void pushLayer(Layer* layer);
     void pushOverlay(Layer* layer);
     void onEvent(Event& e);

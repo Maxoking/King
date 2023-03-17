@@ -17,6 +17,7 @@ IncludeDir["Glad"] = "King/vendor/Glad/include"
 IncludeDir["ImGUI"] = "King/vendor/ImGUI/"
 IncludeDir["Assimp"] = "King/vendor/Assimp/include"
 IncludeDir["stb_image"] = "King/vendor/stb_image"
+IncludeDir["entt"] = "King/vendor/entt/Include"
 
 include "King/vendor/GLFW"
 include "King/vendor/Glad"
@@ -53,7 +54,9 @@ project "King"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGUI}",
 		"%{IncludeDir.Assimp}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
+
 	}
 	
 	libdirs
@@ -98,6 +101,68 @@ project "King"
 		optimize "on"
 
 
+project "Prince-Editor"
+	location "Prince-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGUI}",
+		"%{IncludeDir.Assimp}",
+		"%{IncludeDir.entt}",
+		"King/vendor/spdlog/include",
+		"King/vendor/glm",
+		"King/src"
+	}
+
+	links
+	{
+		"King"
+	}
+	
+	systemversion "latest"
+
+	defines
+	{
+		"GLFW_INCLUDE_NONE"
+	}
+
+	postbuildcommands { 
+		"{COPY} %{prj.location}../King/vendor/Assimp/lib/assimpd.dll %{cfg.targetdir}"
+	}
+
+
+
+	filter "configurations:Debug"
+		defines "KING_DEBUG"
+		runtime "Debug"
+		symbols "on"		
+
+	filter "configurations:Release"
+		defines "KING_RELEASE"
+		runtime "Release"
+		symbols "on"
+
+	filter "configurations:Dist"
+		defines "KING_DIST"
+		runtime "Release"
+		symbols "on"
+
 
 project "Sandbox"
 	location "Sandbox"
@@ -122,6 +187,7 @@ project "Sandbox"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGUI}",
 		"%{IncludeDir.Assimp}",
+		"%{IncludeDir.entt}",
 		"King/vendor/spdlog/include",
 		"King/vendor/glm",
 		"King/src"
@@ -130,6 +196,10 @@ project "Sandbox"
 	links
 	{
 		"King"
+	}
+
+	postbuildcommands { 
+		"{COPY} %{prj.location}../King/vendor/Assimp/lib/assimpd.dll %{cfg.targetdir}"
 	}
 	
 	systemversion "latest"

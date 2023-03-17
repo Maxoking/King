@@ -29,7 +29,7 @@ TestShadowLayer::TestShadowLayer() {
   m_camVelocity = glm::vec3(0.f);
   m_camSpeedForward = 0.f;
   m_camSpeedRight = 0.f;
-  m_sensitivity = 15.f;
+  m_sensitivity = 30.f;
   m_windowCenter.first = (float)(Application::get().getWindow().getWidth()) / 2.f;
   m_windowCenter.second = (float)(Application::get().getWindow().getHeight()) / 2.f;
 
@@ -45,30 +45,21 @@ TestShadowLayer::TestShadowLayer() {
   m_lights.push_back(pl);
 
 
+  m_renderable = new graphics::Renderable(glm::vec3(0.f, 2.f, -2.f));
+  m_renderable->loadModel("res/models/Monkey.obj");
+  m_renderable->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
+  m_renderable->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
+  m_renderable->getMaterial().shininess = 32.f;
+  m_renderables.push_back(m_renderable);
 
-  //m_renderable = new graphics::Renderable(glm::vec3(0.f, 2.f, -2.f));
-  //m_renderable->loadModel("res/models/smoothsphere.obj");
-  //m_renderable->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
-  //m_renderable->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
-  //m_renderable->getMaterial().shininess = 32.f;
-  //m_renderables.push_back(m_renderable);
+  m_lamp = new graphics::Renderable(pl->getPos());
+  m_lamp->loadModel("res/models/smoothsphere.obj");
+  m_lamp->setColor(glm::vec3(0.7f, 0.4f, 0.3f));
+  m_lamp->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
+  m_lamp->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
+  m_lamp->getMaterial().shininess = 32.f;
+  m_renderables.push_back(m_lamp);
 
-  //m_lamp = new graphics::Renderable(pl->getPos());
-  //m_lamp->loadModel("res/models/smoothsphere.obj");
-  //m_lamp->setColor(glm::vec3(0.7f, 0.4f, 0.3f));
-  //m_lamp->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
-  //m_lamp->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
-  //m_lamp->getMaterial().shininess = 32.f;
-  //m_renderables.push_back(m_lamp);
-
-
-  graphics::Renderable* monkey = new graphics::Renderable(glm::vec3(0.f, 3.f, 4.f));
-  monkey->loadModel("res/models/cubeWithUV.obj");
-  monkey->setColor(glm::vec3(0.7f, 0.4f, 0.3f));
-  monkey->getMaterial().diffuse = glm::vec3(0.7f, 0.1f, 0.3f);
-  monkey->getMaterial().specular = glm::vec3(0.7f, 0.1f, 0.3f);
-  monkey->getMaterial().shininess = 32.f;
-  m_renderables.push_back(monkey);
 
   m_floor = new graphics::Renderable(glm::vec3(0.f));
   m_floor->loadModel("res/models/PlaneWithUV.obj");
@@ -76,8 +67,6 @@ TestShadowLayer::TestShadowLayer() {
   m_floor->getMaterial().specular = glm::vec3(0.45f, 0.4f, 0.7f);
   m_floor->getMaterial().shininess = 16.f;
   m_renderables.push_back(m_floor);
-
-
 
 
   m_lastTime = Application::getTime();
@@ -99,8 +88,6 @@ TestShadowLayer::TestShadowLayer() {
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     KING_ERROR("FRAMEBUFFER NOT COMPLETE");
 
-
-  //glBindFramebuffer(GL_FRAMEBUFFER, 0);
   m_depthBuffer->unbind();
 
   float near_plane = 1.0f, far_plane = 20.f;
@@ -142,13 +129,25 @@ void TestShadowLayer::onUpdate() {
  
 
 
-  //glm::vec3 lightpos = m_light->getPos();
-  //glm::vec3 rot =  glm::rotateZ(lightpos, 0.25f * deltaTime);
-  //m_light->setPos(rot);
+  glm::vec3 lightpos = m_light->getPos();
+  glm::vec3 rot =  glm::rotateZ(lightpos, 0.25f * deltaTime);
+  m_light->setPos(rot);
 
   //m_light->setIntensity(rot.y / 40.f);
 
   //if (m_light->getPos().y < 0) m_light->setIntensity(0.f);
+
+  //m_lightView = glm::lookAt(m_light->getPos(),
+  //  glm::vec3(0.0f, 0.0f, 0.0f),
+  //  glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+  //m_lightSpaceMatrix = m_lightProjection * m_lightView;
+
+}
+
+void TestShadowLayer::onRender()
+{
 
   m_lightView = glm::lookAt(m_light->getPos(),
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -157,10 +156,6 @@ void TestShadowLayer::onUpdate() {
 
   m_lightSpaceMatrix = m_lightProjection * m_lightView;
 
-}
-
-void TestShadowLayer::onRender()
-{
   //1st renderpass for shadow map
   m_depthBuffer->bind();
   glViewport(0, 0, 1024, 1024);
@@ -180,8 +175,8 @@ void TestShadowLayer::onRender()
 
   //2nd renderpass
   glViewport(0, 0, Application::get().getWindow().getWidth(), Application::get().getWindow().getHeight());
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  //glClear(GL_COLOR_BUFFER_BIT);
   
 	m_tex2D->bind(0);
 	m_texDepth->bind(1);
@@ -189,13 +184,10 @@ void TestShadowLayer::onRender()
   m_renderer->begin(m_shader, m_camera, m_lights, m_lightSpaceMatrix);
 
  
- 
-
   for (int i = 0; i < m_renderables.size(); i++) {
     m_renderer->submit(m_renderables[i]);
   }
 
- 
   m_renderer->flush();
   m_renderer->end();
 
@@ -248,7 +240,6 @@ bool TestShadowLayer::onKeyPressed(King::KeyPressedEvent e)
     }
 
     if (e.getKeyCode() == GLFW_KEY_W) {
-
       m_camVelocity.z += camspeed;
     }
 
@@ -265,8 +256,6 @@ bool TestShadowLayer::onKeyPressed(King::KeyPressedEvent e)
     }
   }
  
-  
-
   return true;
 }
 
@@ -300,6 +289,28 @@ void TestShadowLayer::onImGuiRender()
   ImGui::Begin("Light");
   ImGui::Text("Direction: %.1f x %.1f y %1.f z", m_light->getPos().x, m_light->getPos().y, m_light->getPos().z);
   ImGui::End();
+
+  ImGui::Begin("Test");
+  //ImGui::Text("FPS: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+  //ImGui::Text("Light Position: %.1f x %.1f y %1.f z", m_lightSphere->getPos().x, m_lightSphere->getPos().y, m_lightSphere->getPos().z);
+  ImGui::ColorEdit3("light color", (float*)&m_light->getColor());
+  ImGui::SliderFloat("light intensity", (float*)&m_light->getIntensity(), 0.f, 1.f, "%.3f");
+  ImGui::ColorEdit3("object diffuse", (float*)&m_renderable->getMaterial().diffuse);
+  ImGui::ColorEdit3("object specular", (float*)&m_renderable->getMaterial().specular);
+  ImGui::InputFloat("object shininess", (float*)&m_renderable->getMaterial().shininess);
+
+
+  for (auto& integrator : std::filesystem::directory_iterator("C:/dev/King/Sandbox/res/models")) {
+    std::string string = integrator.path().filename().string();
+    if (ImGui::Button(string.c_str())) {
+      m_renderable->loadModel("res/models/" + string);
+    };
+
+  }
+
+  ImGui::End();
+
+  
 
   ImGui::Begin("FPS");
   ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);

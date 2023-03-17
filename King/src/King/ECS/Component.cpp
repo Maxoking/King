@@ -6,16 +6,16 @@
 namespace King {
 	namespace ECS {
 
-    std::vector<std::tuple<ECSComponentCreateFunction, ECSComponentFreeFunction, size_t>> BaseECSComponent::s_componentTypes;
+		std::vector<std::tuple<ECSComponentCreateFunction, ECSComponentFreeFunction, size_t>> BaseECSComponent::s_componentTypes;
 
-    uint32_t BaseECSComponent::registerComponentType(ECSComponentCreateFunction createfn,
-      ECSComponentFreeFunction freefn, size_t size) {
+		uint32_t BaseECSComponent::registerComponentType(ECSComponentCreateFunction createfn,
+			ECSComponentFreeFunction freefn, size_t size) {
 
-      uint32_t componentID = s_componentTypes.size();
-      s_componentTypes.push_back(std::tuple<ECSComponentCreateFunction, ECSComponentFreeFunction, size_t>(
-        createfn, freefn, size));
-      return componentID;
-    }
+			uint32_t componentID = s_componentTypes.size();
+			s_componentTypes.push_back(std::tuple<ECSComponentCreateFunction, ECSComponentFreeFunction, size_t>(
+				createfn, freefn, size));
+			return componentID;
+		}
 
 	}//namespace ECS end
 }//namespace King end

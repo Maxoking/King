@@ -11,6 +11,7 @@
 #include "King/Events/KeyEvent.h"
 #include "King/Graphics/Renderable.h"
 #include "King/Graphics/Buffers/FrameBuffer.h"
+#include "King/Graphics/Textures/TextureDepth.h"
 
 #include "imgui.h"
 #include "King/Input.h"
@@ -62,7 +63,7 @@ private:
   glm::mat4 m_lightView;
   glm::mat4 m_lightProjection;
   glm::mat4 m_lightSpaceMatrix;
-  GLuint m_shadowMap;
+ //graphics::Texture2D* m_tex2D;
+  graphics::TextureDepth* m_texDepth;
   std::vector<graphics::Light*> m_lights;
-
 };

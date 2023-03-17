@@ -9,6 +9,9 @@ namespace King {
       m_yaw = -90.f;
       m_pitch = 0.f;
       m_position = pos;
+      m_fov = fov;
+      m_zNear = zNear;
+      m_zFar = zFar;
       //m_direction = glm::vec3(0.f, 0.f, 0.1f);
       m_direction = glm::vec3(0.f, 0.f, -1.f);
       m_worldUp = glm::vec3(0.f, 1.f, 0.f);

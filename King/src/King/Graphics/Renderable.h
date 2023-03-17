@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.h"
+#include "Textures/Texture2D.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -10,6 +11,8 @@ namespace King {
       glm::vec3 diffuse;
       glm::vec3 specular;
       float shininess;
+
+      Texture2D texture;
     };
 
     class KING_API Renderable {

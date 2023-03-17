@@ -16,9 +16,7 @@ namespace King {
       else {
         KING_TRACE("Loading new Model " + path);
         loadModel(path);
-      }
-
-      
+      }     
     }
 
     void Model::loadModel(std::string path)
@@ -125,7 +123,11 @@ namespace King {
 				if (mesh->mTextureCoords[0]) {
 					verticesWithNormalsAndTexCoords.push_back(texCoords[i].x);
 					verticesWithNormalsAndTexCoords.push_back(texCoords[i].y);
-				}
+        }
+        else {
+          verticesWithNormalsAndTexCoords.push_back(0);
+          verticesWithNormalsAndTexCoords.push_back(0);
+        }
       }
 
       return Mesh(verticesWithNormalsAndTexCoords, indices);
@@ -150,7 +152,6 @@ namespace King {
       std::shared_ptr<graphics::Buffer> vbo(new graphics::Buffer(&m_vertices[0], m_vertices.size() * sizeof(GLfloat)));
       vbo->setLayout(layout);
 
-      //m_vao->addBufferWithLayout(vbo);
       m_vao->addBufferWithLayout(vbo);
       std::shared_ptr<graphics::IndexBuffer> ibo(new graphics::IndexBuffer(&m_indices[0], m_indices.size()));
       m_vao->setIBO(ibo);

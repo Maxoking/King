@@ -1,3 +1,4 @@
+#pragma once
 #include "King/Core.h"
 #include "Texture.h"
 
@@ -10,6 +11,11 @@ namespace King {
 		public:
 			Texture2D(char* filename, TextureFilter filter = TextureFilter::LINEAR, 
 				TextureWrap wrap = TextureWrap::REPEAT, TextureFormat format = TextureFormat::RGB);
+
+			Texture2D(TextureFilter filter = TextureFilter::LINEAR,
+				TextureWrap wrap = TextureWrap::REPEAT, TextureFormat format = TextureFormat::RGB);
+
+			void setData(void* data);
 			void const bind(unsigned int slot = 0) override;
 			void const unbind(unsigned int slot = 0) override;
 

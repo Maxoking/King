@@ -32,12 +32,26 @@ namespace King {
 
       void setYaw(float yaw) { m_yaw = yaw; };
       inline const float& getYaw() const { return m_yaw; };
+
+
       void setPitch(float pitch) { m_pitch = pitch; };
       inline const float& getPitch() const { return m_pitch; };
+
+      void setFov(float fov) { m_fov = fov; };
+      inline const float& getFov() const { return m_fov; };
+
+      void setZNear(float zNear) { m_zNear = zNear; };
+      inline const float& getZNear() const { return m_zNear; };
+
+      void setZFar(float zFar) { m_zFar = zFar; };
+      inline const float& getZFar() const { return m_zFar; };
+
+
     private:
       glm::vec3 m_worldUp;
       glm::vec3 m_position, m_upVector, m_direction;
       float m_pitch, m_yaw;
+      float m_fov, m_zNear, m_zFar;
       glm::mat4 m_projectionMatrix;
       glm::mat4 m_viewMatrix;
     };

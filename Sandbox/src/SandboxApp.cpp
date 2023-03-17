@@ -1,5 +1,5 @@
 #include <King.h>
-#include "TestGameLayer.h"
+//#include "TestGameLayer.h"
 #include "TestShadowLayer.h"
 
 class Sandbox : public King::Application {

@@ -2,25 +2,25 @@
 #include "ECSManager.h"
 
 namespace King {
-  namespace ECS {
-    
-    EntityHandle ECSManager::makeEntity(BaseECSComponent * entityComponents, uint32_t * componentTypeIDs, size_t numComponents)
-    {
-      EntityRawType* newEntity = new EntityRawType();
-      EntityHandle handle = (EntityHandle)newEntity;
+	namespace ECS {
 
-      for (uint32_t i; i < numComponents; i++) {
+		EntityHandle ECSManager::makeEntity(BaseECSComponent* entityComponents, uint32_t* componentTypeIDs, size_t numComponents)
+		{
+			EntityRawType* newEntity = new EntityRawType();
+			EntityHandle handle = (EntityHandle)newEntity;
 
-        //ToDO: if(falsche typeId) -> return NULL_HANDLE und gib fehler aus
+			for (uint32_t i; i < numComponents; i++) {
 
-        ECSComponentCreateFunction createfn = BaseECSComponent::getTypeCreateFunction(componentTypeIDs[i]);
-        std::pair<uint32_t, uint32_t> newPair;
-        newPair.first = componentTypeIDs[i];
-        newPair.second = createfn(m_components[componentTypeIDs[i]], handle, &entityComponents[i]);
-        newEntity->second.push_back(newPair);
-      }
+				//ToDO: if(falsche typeId) -> return NULL_HANDLE und gib fehler aus
 
-      return EntityHandle();
-    }
-  }
-} 
+				ECSComponentCreateFunction createfn = BaseECSComponent::getTypeCreateFunction(componentTypeIDs[i]);
+				std::pair<uint32_t, uint32_t> newPair;
+				newPair.first = componentTypeIDs[i];
+				newPair.second = createfn(m_components[componentTypeIDs[i]], handle, &entityComponents[i]);
+				newEntity->second.push_back(newPair);
+			}
+
+			return EntityHandle();
+		}
+	}
+}

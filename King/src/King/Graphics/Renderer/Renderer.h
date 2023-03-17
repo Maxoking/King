@@ -14,11 +14,11 @@ namespace King {
 		class KING_API Renderer {
 		public:
 			virtual void submit(Renderable* renderable) = 0;
-      virtual void begin(Shader* shader, Camera* camera, std::vector<Light*> lights, glm::mat4 lightSpaceMatrix) = 0;
-      virtual void end() = 0;
+			virtual void begin(Shader* shader, Camera* camera, std::vector<Light*> lights, glm::mat4 lightSpaceMatrix) = 0;
+			virtual void end() = 0;
 			virtual void flush() = 0;
-    protected:
-      Shader* active_shader;
+		protected:
+			Shader* active_shader;
 
 		};
 	}

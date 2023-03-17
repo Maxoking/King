@@ -34,7 +34,7 @@ TestGameLayer::TestGameLayer() {
 
 
   m_light = new graphics::DirectionalLight();
-  m_light->setPos(glm::vec3(0.f, 1.f, 0.f));
+  m_light->setPos(glm::vec3(3.f, 6.5f, 0.f));
   m_light->setIntensity(0.3f);
 
   m_lights.push_back(m_light);
@@ -73,27 +73,20 @@ TestGameLayer::TestGameLayer() {
   m_floor->getMaterial().shininess = 16.f;
   m_renderables.push_back(m_floor);
 
-
   m_lastTime = Application::getTime();
   camMode = false;
 
-  //std::filesystem::directory_entry dir = std::filesystem::directory_entry();
-  //dir.path = "C:\dev\King\Sandbox\res\models";
-
-  glGenTextures(1, &m_shadowMap);
-  glBindTexture(GL_TEXTURE_2D, m_shadowMap);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-    1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  //m_tex2D = new graphics::Texture2D("res/textures/container.jpg");
 
   m_depthBuffer = new graphics::FrameBuffer();
+
+  //The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
   m_depthBuffer->bind();
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
-  glDrawBuffer(GL_NONE);
-  glDrawBuffer(GL_NONE);
+
+  m_texDepth = new graphics::TextureDepth(1024, 1024);
+  m_depthBuffer->attachDepthAttachment(m_texDepth->getID());
+
+  glDrawBuffer(GL_NONE); // No color buffer is drawn to.
 
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     KING_TRACE("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
@@ -104,6 +97,12 @@ TestGameLayer::TestGameLayer() {
   float near_plane = 1.0f, far_plane = 7.5f;
   m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane,
     far_plane);
+
+  m_lightView = glm::lookAt(m_light->getPos(),
+    glm::vec3(0.0f, 0.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f));
+
+  m_lightSpaceMatrix = m_lightProjection * m_lightView;
  
   
 }
@@ -143,6 +142,11 @@ void TestGameLayer::onUpdate() {
   }
 
   m_light->setPos(m_lightSphere->getPos());
+  m_lightView = glm::lookAt(m_light->getPos(),
+    glm::vec3(0.0f, 0.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f));
+
+  m_lightSpaceMatrix = m_lightProjection * m_lightView;
 
   if (camMode) {
     Application::get().getWindow().setMousePos(m_windowCenter.first, m_windowCenter.second);
@@ -155,27 +159,38 @@ void TestGameLayer::onUpdate() {
   m_camera->setPos(m_camera->getPos() + rightVec * m_camVelocity.x);
   m_camera->setPos(m_camera->getPos() + forwardVec * m_camVelocity.z);
   m_camera->setPos(m_camera->getPos() + m_camera->getUp() * m_camVelocity.y);
-
   m_camera->updateCameraMatrices();
 }
 
 void TestGameLayer::onRender()
 {
   //1st renderpass for shadow map
-  m_lightView = glm::lookAt(m_light->getPos(),
-    glm::vec3(0.0f, 0.0f, 0.0f),
-    glm::vec3(0.0f, 1.0f, 0.0f));
 
-  m_lightSpaceMatrix = m_lightProjection * m_lightView;
 
   //m_shadowShader->bind();
   //m_shadowShader->setUniformMat4("light_space_mat", m_lightSpaceMatrix);
 
 
  
-  glViewport(0, 0, 1024, 1024);
+  //glViewport(0, 0, 1024, 1024);
+  //m_depthBuffer->bind();
+  //glClear(GL_DEPTH_BUFFER_BIT);
+
+  //1st renderpass for shadow map
   m_depthBuffer->bind();
-  glClear(GL_DEPTH_BUFFER_BIT);
+  glViewport(0, 0, 1024, 1024);
+
+  m_depthBuffer->clearDepth();
+  ((graphics::SimpleRenderer3D*)m_renderer)->beginShadowPass(m_shadowShader, m_lightSpaceMatrix, m_renderables);
+
+  for (int i = 0; i < m_renderables.size(); i++) {
+    m_renderer->submit(m_renderables[i]);
+  }
+
+  m_renderer->flush();
+  m_depthBuffer->unbind();
+
+  m_renderer->end();
 
 
   ((graphics::SimpleRenderer3D*)m_renderer)->beginShadowPass(m_shadowShader, m_lightSpaceMatrix, m_renderables);
@@ -192,25 +207,17 @@ void TestGameLayer::onRender()
   m_renderer->end();
 
   //2nd renderpass
-
-
   glViewport(0, 0, Application::get().getWindow().getWidth(), Application::get().getWindow().getHeight());
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  m_shader->setUniformMat4("light_space_mat", m_lightSpaceMatrix);
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, m_shadowMap);
-  m_shader->setUniform1i("shadow_map", 0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+  //m_tex2D->bind(0);
+  m_texDepth->bind(1);
+
   m_renderer->begin(m_shader, m_camera, m_lights, m_lightSpaceMatrix);
-
-    
-    
-
 
   for (int i = 0; i < m_renderables.size(); i++) {
     m_renderer->submit(m_renderables[i]);
   }
 
- 
   m_renderer->flush();
   m_renderer->end();
 
