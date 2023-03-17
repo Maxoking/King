@@ -25,7 +25,7 @@ namespace King {
       const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
       if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
       {
-        KING_CORE_ERROR("Model konnte nicht geladen werden!");
+        KING_CORE_ERROR("Model konnte nicht geladen werden! Path: " + path);
         return;
       }
       std::string directory = path.substr(0, path.find_last_of('/'));
